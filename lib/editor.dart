@@ -34,15 +34,13 @@ class _EditorScreenState extends State<EditorScreen> {
             ),
             Divider(color: Colors.grey[200]),
             Expanded(
-              child: SingleChildScrollView(
-                child:  TextField(
-                  controller: contentController,
-                  minLines: 1,
-                  maxLines: 20,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Input TODO",
-                  ),
+              child:  TextField(
+                controller: contentController,
+                minLines: 1,
+                maxLines: 20,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: "Input TODO",
                 ),
               ),
             ),
