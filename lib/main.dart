@@ -41,6 +41,11 @@ class _TodoListPageState extends State<_TodoListPage> {
             if (snapshot.hasError) {
               return Text("Error: ${snapshot.error.toString()}");
             }
+            if (!snapshot.hasData) {
+              return Center(
+                child: Text("No Todo or Loading Now"),
+              );
+            }
             return ListView.separated(
               itemCount: snapshot.data.length,
               separatorBuilder: (context, position) => Divider(color: Colors.grey),
