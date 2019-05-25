@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'db.dart';
+import 'detail.dart';
 import 'editor.dart';
 
 void main() => runApp(MyApp());
@@ -81,14 +82,21 @@ class _TodoListPageState extends State<_TodoListPage> {
         });
       },
       background: Container(color: Colors.red,),
-      child: Padding(
-        padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(todo.title, style: TextStyle(fontSize: 24)),
-            Text(todo.content, style: TextStyle(fontSize: 16), maxLines: 1,)
-          ],
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => TodoDetailScreen(todo: todo)));
+        },
+        child: Padding(
+          padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(todo.title, style: TextStyle(fontSize: 24), maxLines: 1, overflow: TextOverflow.ellipsis),
+              Text(todo.content, style: TextStyle(fontSize: 16), maxLines: 1, overflow: TextOverflow.ellipsis,)
+            ],
+          ),
         ),
       )
     );
