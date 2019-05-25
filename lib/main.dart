@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'data.dart';
 import 'db.dart';
-import 'detail.dart';
 import 'editor.dart';
 
 void main() => runApp(MyApp());
@@ -86,7 +85,7 @@ class _TodoListPageState extends State<_TodoListPage> {
         onTap: () {
           Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => TodoDetailScreen(todo: todo)));
+              MaterialPageRoute(builder: (context) => EditorScreen(todo: todo)));
         },
         child: Padding(
           padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
