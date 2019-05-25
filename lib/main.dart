@@ -29,6 +29,8 @@ class _TodoListPage extends StatefulWidget {
 
 class _TodoListPageState extends State<_TodoListPage> {
 
+  List<Todo> todoList;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +48,12 @@ class _TodoListPageState extends State<_TodoListPage> {
                 child: Text("No Todo or Loading Now"),
               );
             }
+            this.todoList = snapshot.data;
             return ListView.separated(
               itemCount: snapshot.data.length,
-              separatorBuilder: (context, position) => Divider(color: Colors.grey),
+              separatorBuilder: (context, position) => Divider(height: 1,color: Colors.grey),
               itemBuilder: (context, position) =>
-                  _createTodo(context, snapshot.data[position])
+                  _createTodo(context, position)
             );
           }
       ),
@@ -67,8 +70,17 @@ class _TodoListPageState extends State<_TodoListPage> {
     );
   }
 
-  Widget _createTodo(BuildContext context, Todo todo) {
-    return Container(
+  Widget _createTodo(BuildContext context, int index) {
+    final Todo todo = this.todoList[index];
+    return Dismissible(
+      key: Key(todo.id.toString()),
+      onDismissed: (direction) {
+        DBProvider.db.delete(todo);
+        setState(() {
+          this.todoList.removeAt(index);
+        });
+      },
+      background: Container(color: Colors.red,),
       child: Padding(
         padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
         child: Column(

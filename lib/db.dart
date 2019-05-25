@@ -41,6 +41,11 @@ class DBProvider {
     }
     return result.map((todo) => Todo.fromJson(todo)).toList();
   }
+  
+  Future<int> delete(Todo todo) async {
+    final db = await database;
+    return await db.delete("todo", where: "id = ?", whereArgs: [todo.id]);
+  }
 
   static String createTodoTable = '''
      CREATE TABLE todo (
