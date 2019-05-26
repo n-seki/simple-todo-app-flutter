@@ -8,19 +8,31 @@ class EditorScreen extends StatefulWidget {
   EditorScreen({Key key, this.todo}) : super(key: key);
 
   @override
-  _EditorScreenState createState() => _EditorScreenState();
+  _EditorScreenState createState() => _EditorScreenState(todo: todo);
 }
 
 class _EditorScreenState extends State<EditorScreen> {
   final titleController = new TextEditingController();
   final contentController = new TextEditingController();
+  final Todo todo;
+  _EditorScreenState({Key key, this.todo});
+
+  bool isEditable;
+
+  @override
+  void initState() {
+    super.initState();
+    this.isEditable = this.todo == null;
+    if (this.todo != null) {
+      titleController.text = widget.todo.title;
+      contentController.text = widget.todo.content;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     String title = 'Add';
-    if (widget.todo != null) {
-      titleController.text = widget.todo.title;
-      contentController.text = widget.todo.content;
+    if (this.todo != null) {
       title = 'Edit';
     }
     return Scaffold(
@@ -33,8 +45,8 @@ class _EditorScreenState extends State<EditorScreen> {
           children: [
             TextField(
               controller: titleController,
-              enabled: widget.todo == null,
-              autofocus: widget.todo == null,
+              enabled: this.isEditable,
+              autofocus: this.isEditable,
               maxLines: 1,
               maxLength: 50,
               decoration: InputDecoration(
@@ -46,7 +58,7 @@ class _EditorScreenState extends State<EditorScreen> {
             Divider(color: Colors.grey[200]),
             Expanded(
               child:  TextField(
-                enabled: widget.todo == null,
+                enabled: this.isEditable,
                 controller: contentController,
                 minLines: 1,
                 maxLines: 20,
@@ -57,18 +69,26 @@ class _EditorScreenState extends State<EditorScreen> {
                 style: TextStyle(fontSize: 16),
               ),
             ),
-            if (widget.todo == null)
+            if (this.isEditable)
               FlatButton(
-                child: Text("Add"),
+                child: Text(this.todo == null ? "Add" : "Update"),
                 onPressed: () {
                   if (!_checkInput()) {
                     return;
                   }
-                  Future<int> result = insert();
+                  Future<int> result = todo == null ? insert() : update();
                   result.then((rowNum) {
-                    print("insert success: $rowNum");
                     Navigator.pop(context);
                   });
+                },
+              ),
+            if (!this.isEditable)
+              FlatButton(
+                child: Text("Enable Edit"),
+                  onPressed: () {
+                    setState(() {
+                      this.isEditable = true;
+                    });
                 },
               )
           ],
@@ -83,6 +103,15 @@ class _EditorScreenState extends State<EditorScreen> {
       content: contentController.text
     );
     return await DBProvider.db.insert(todo);
+  }
+
+  Future<int> update() async {
+    final Todo todo = Todo(
+      title: titleController.text,
+      content: contentController.text
+    );
+    todo.id = this.todo.id;
+    return await DBProvider.db.update(todo);
   }
 
   bool _checkInput() {

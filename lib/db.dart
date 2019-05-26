@@ -47,6 +47,11 @@ class DBProvider {
     return await db.delete("todo", where: "id = ?", whereArgs: [todo.id]);
   }
 
+  Future<int> update(Todo todo) async {
+    final db = await database;
+    return await db.update("todo", todo.toJson(), where: "id = ?", whereArgs: [todo.id]);
+  }
+
   static String createTodoTable = '''
      CREATE TABLE todo (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
