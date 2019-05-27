@@ -90,14 +90,31 @@ class _TodoListPageState extends State<_TodoListPage> {
         child: Padding(
           padding: EdgeInsets.only(left: 16, top: 8, right: 16, bottom: 8),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(todo.title, style: TextStyle(fontSize: 24), maxLines: 1, overflow: TextOverflow.ellipsis),
-              Text(todo.content, style: TextStyle(fontSize: 16), maxLines: 1, overflow: TextOverflow.ellipsis,)
+              _createExpandedText(text: todo.title, fontSize: 24),
+              _createExpandedText(text: todo.content, fontSize: 16),
             ],
           ),
         ),
       )
+    );
+  }
+  
+  Flex _createExpandedText({String text, double fontSize}) {
+    return Flex(
+      direction: Axis.horizontal,
+      children: <Widget>[
+        Expanded(
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: fontSize),
+          )
+        )
+      ],
     );
   }
 }
