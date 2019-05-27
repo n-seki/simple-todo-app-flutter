@@ -18,26 +18,27 @@ class _EditorScreenState extends State<EditorScreen> {
   _EditorScreenState({Key key, this.todo});
 
   bool isEditable;
+  String title;
 
   @override
   void initState() {
     super.initState();
-    this.isEditable = this.todo == null;
     if (this.todo != null) {
       titleController.text = widget.todo.title;
       contentController.text = widget.todo.content;
+      title = 'Edit';
+      this.isEditable = false;
+    } else {
+      this.isEditable = true;
+      title = 'Add';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    String title = 'Add';
-    if (this.todo != null) {
-      title = 'Edit';
-    }
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(this.title),
       ),
       body: Padding(
         padding: EdgeInsets.all(12),
